@@ -8,20 +8,43 @@ Created on Tue Mar 19 11:39:47 2024
 #---------------------FILL PARAMETERS HERE-------------------------------------
 #---------------------ALL TIME VALUES ARE IN SECONDS---------------------------
 #---------------------INTENSITIES ARE IN VOLTS---------------------------------
-#intensities = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
-intensities = 5.0
-waveDuration = 5
-samplingRateInWave = 1/5000
-stimOnsetInWave = 0
-pulseDurationInWave = 0.001
-lowStateInWave = 0
-repeatPulses = 100
-freqPulses = 20
 
-numTrial = 3
-interTrialInterval = 15
+#Size of the pulse in Volts
+intensities = 5.0  
 
-dev_chan = 'Dev1/ao1' #'Dev1/ao0' = laser / 'Dev1/ao1' =electric pulse
+#Total duration of the train 
+waveDuration = 3 
+
+#5k is the max of the NiDaq
+samplingRateInWave = 1/5000 
+
+#Onset of the first stim in train 
+stimOnsetInWave = 0 
+
+#Duration of each pulse 
+pulseDurationInWave = 0.001 
+
+#Baseline voltage
+lowStateInWave = 0 
+
+#Baseline voltage
+repeatPulses = 60
+
+#Frequency of the pulses 
+freqPulses = 20 
+
+#Number of trials 
+numTrial = 2 
+
+#Times between trials 
+interTrialInterval = 10 
+
+#'Dev1/ao0' = laser / 'Dev1/ao1' =electric pulse
+dev_chan = 'Dev1/ao0'
+
+
+
+#TODO ADD superimpose channels 
 
 #----------------------------------THE CODE------------------------------------
 #------------------------------------------------------------------------------
@@ -103,6 +126,8 @@ stimTime, stimWave = TTLsigWave(totalDuration=waveDuration,
 
 
 if __name__ == '__main__':
+    
+    print('Buffering')
 
     import nidaqmx 
     import time
@@ -124,8 +149,9 @@ if __name__ == '__main__':
     '''
     
     for i in range(numTrial):
-        print('Trial #{}/{}'.format(i+1, numTrial))
-    
+        
+        print('----------- Trial #{}/{} -----------'.format(i+1, numTrial))
+
         #Initiate AO0 write
         #Write task : set voltage to Analog Output 0 (ao0)
         taskWrite = nidaqmx.Task()
@@ -152,13 +178,24 @@ if __name__ == '__main__':
             make_plot(stimTime, stimWave, title=interTrialInterval)
         
         #Write the stim wave to DAQ
+        print('Stim Started')
         taskWrite.write(stimWave)
 
         #Clear task to allow buffering of the next trial 
         taskWrite.stop()
         taskWrite.close()
+        print('Stim Complete')
         
         #Intertrial time, the code will stop during this amount of time
-        time.sleep(interTrialInterval)
+
+        for i in range(interTrialInterval):
+            time.sleep(1)
+            print ('    Next trial in: {}s'.format(interTrialInterval-i-1))
+        print('        Trial complete')
+        print('')
+        print('')
+
+        #time.sleep(interTrialInterval)
+
 
     
