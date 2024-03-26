@@ -188,12 +188,18 @@ if __name__ == '__main__':
         
         #Intertrial time, the code will stop during this amount of time
 
-        for i in range(interTrialInterval):
+        for j in range(interTrialInterval):
             time.sleep(1)
-            print ('    Next trial in: {}s'.format(interTrialInterval-i-1))
-        print('        Trial complete')
-        print('')
-        print('')
+            print ('    Next trial in: {}s'.format(interTrialInterval-j-1))
+            
+        if i < numTrial-1:
+            print('        Trial complete')
+            print('')
+            print('')
+        else: 
+            print('------------ ALL Trial Completed --------------')
+            print('----------------------------------------------')
+            print('----------------------------------------------')
 
         #time.sleep(interTrialInterval)
 
