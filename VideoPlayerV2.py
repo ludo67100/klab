@@ -17,18 +17,8 @@ warnings.filterwarnings("ignore")
 
 
 
-# video = 'J:/RAW_DATA/PHOTOMETRY/RECORDINGS/08132024_LS/nLight1A/Video2024-08-13T14_14_14.avi'
-# tsFile = 'J:/RAW_DATA/PHOTOMETRY/RECORDINGS/08132024_LS/nLight1A/VideoTime2024-08-13T14_14_14.csv'
-# photometryTimeFile = 'J:/RAW_DATA/PHOTOMETRY/RECORDINGS/08132024_LS/nLight1A/DataTime2024-08-13T14_14_14.csv'
-
-
 video = 'J:/RAW_DATA/PHOTOMETRY/RECORDINGS/08222024_LS/nLight1C/Video2024-08-22T17_15_02.avi'
 tsFile = 'J:/RAW_DATA/PHOTOMETRY/RECORDINGS/08222024_LS/nLight1C/VideoTime2024-08-22T17_15_02.csv'
-photometryTimeFile = 'J:/RAW_DATA/PHOTOMETRY/RECORDINGS/08222024_LS/nLight1C/DataTime2024-08-22T17_15_02.csv'
-
-
-
-
 
 
 def flick(x):
@@ -67,16 +57,6 @@ print ('Frame Rate +/-SD: {:.2f} +/- {:.2f}'.format(np.nanmean(frameRates), np.n
 print('{} frames in file'.format(int(tots)))
 print('Total duration: {:.2f}s'.format(resetTimeStamps[-1]))
 
-#Photometry timestamps
-dataStamps = np.genfromtxt(photometryTimeFile, delimiter=',')[:,1]
-resetDataStamps = [(x-dataStamps[0])/1000 for x in dataStamps]
-
-tsLag = dataStamps[0]/1000 - timeStamps[0]
-if tsLag < 0: 
-    print('Video lags {:.2f}s behind photometry data'.format(tsLag))
-else: 
-    print('Video is {:.2f}s ahead of photometry data'.format(tsLag))
-    tsLag = tsLag*-1
 
 
 #Initiate timer bars for controls 
